@@ -41,7 +41,7 @@ const statisticsTarget = [
     title: 'In-Hose Earning',
     color: 'info',
     avatarSrc: InHouseEarning,
-    stats: '$1,271',
+    stats: data.data.inhouse_earning,
     change: 39892.00,
     subtitle: 'In-Hose Earning',
   }
@@ -156,15 +156,15 @@ const logisticData = ref([
     avatarSrc: ce,
     color: 'primary',
     title: 'commission Earned',
-    value: 12755.02,
+    value: data.data.commission_earned,
     change: 18.2,
     isHover: true,
   },
   {
     avatarSrc: dce,
     color: 'Total stores',
-    title: 'Delivery Change Earned',
-    value: 1360.00,
+    title: 'Delivery Charge Earned',
+    value: data.data.delivery_charge_earned,
     change: -8.7,
     isHover: false,
   },
@@ -172,7 +172,7 @@ const logisticData = ref([
     avatarSrc: ttc,
     color: 'Total Products',
     title: 'Total Tax Colledted',
-    value: 2343.00,
+    value: data.data.inhouse_earning,
     change: 4.3,
     isHover: false,
   },
@@ -180,7 +180,7 @@ const logisticData = ref([
     avatarSrc: pa,
     color: 'info',
     title: 'Pending Amount',
-    value: 8153.00,
+    value: data.data.pending_amount,
     change: -2.5,
     isHover: false,
   },
@@ -249,7 +249,7 @@ const moreList = [
                 </VAvatar>
 
                 <p class="text-lg mb-2">
-                  ${{ data.change }}
+                  ${{ data.stats }}
                   
                 </p>
                 <div class="d-flex align-center">

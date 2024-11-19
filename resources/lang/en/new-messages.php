@@ -8392,4 +8392,7 @@ return [
 	"if_successful,_you_will_see_a_confirmation_message_indicating_that_the_connection_is_working_fine" => "If successful  you will see a confirmation message indicating that the connection is working fine",
 	"if_not,_double-check_your_SMTP_settings_and_try_again" => "If not  double-check your SMTP settings and try again",
 	"if_you`re_unsure_about_the_SMTP_settings,_contact_your_email_service_provider_or_IT_administrator_for_assistance" => "If you`re unsure about the SMTP settings  contact your email service provider or IT administrator for assistance",
+	"terms_and_Condition" => "Terms and Condition",
+	"The_phone_number_may_not_be_greater_than_20_characters" => "The phone number may not be greater than 20 characters",
+	"registration_successful" => "Registration successful",
 ];

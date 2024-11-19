@@ -1,4 +1,5 @@
 <script setup>
+import {useStore} from 'vuex'
 import australia from '@images/icons/countries/au.png'
 import brazil from '@images/icons/countries/br.png'
 import china from '@images/icons/countries/cn.png'
@@ -17,9 +18,15 @@ import ubuntu from '@images/logos/ubuntu.png'
 import ucBrowser from '@images/logos/uc-browser.png'
 import windows from '@images/logos/windows.png'
 
-const tabs = ref('browser')
+const store = useStore();
 
-const browserData = [
+var data = store.state.dashboard.adminWalletData.data.top_customer
+
+console.log('==========================>',data)
+
+const tabs = ref('Customer')
+
+const customerData = [
   {
     id: 1,
     visits: '8.92k',
@@ -70,7 +77,7 @@ const browserData = [
   },
 ]
 
-const osData = [
+const popularstoreData = [
   {
     id: 1,
     color: 'success',
@@ -121,7 +128,7 @@ const osData = [
   },
 ]
 
-const countryData = [
+const topSellingStoreData = [
   {
     id: 1,
     country: 'USA',
@@ -173,7 +180,7 @@ const countryData = [
 ]
 
 const tableData = computed(() => {
-  return tabs.value === 'browser' ? browserData : tabs.value === 'system' ? osData : countryData
+  return tabs.value === 'Customer' ? customerData : tabs.value === 'Popular Stores' ? popularstoreData : topSellingStoreData
 })
 </script>
 
@@ -187,7 +194,7 @@ const tableData = computed(() => {
         <VTab value="Customer">
           Top Customers
         </VTab>
-        <VTab value="Popular Sotres">
+        <VTab value="Popular Stores">
           Most Popular Stores
         </VTab>
         <VTab value="Selling Stores">
@@ -217,7 +224,7 @@ const tableData = computed(() => {
             scope="col"
             class="border-0"
           >
-            VISITS
+            {{ tabs.value === 'Customer' ? 'Order' : tabs.value === 'Popular Stores' ? 'Recommend' : 'Sell' }}
           </th>
           <th
             scope="col"
@@ -240,7 +247,7 @@ const tableData = computed(() => {
             <div class="d-flex align-center gap-3">
               <div>
                 <VImg
-                  :src="data.src"
+                  :src="data.image"
                   width="24"
                   height="24"
                 />

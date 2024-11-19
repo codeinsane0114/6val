@@ -1,5 +1,10 @@
 <script setup>
 import { useTheme } from 'vuetify'
+import { useStore } from 'vuex'
+
+const store = useStore();
+
+const overviewData = store.state.dashboard.adminWalletData.data
 
 const colorVariables = themeColors => {
   const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
@@ -20,11 +25,13 @@ const expenseRationChartConfig = computed(() => {
     series5: '#ffa1a1',
   }
 
+  const totalValue = overviewData.getTotalCustomerCount+overviewData.getTotalVendorCount+overviewData.getTotalDeliveryManCount
+
   const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value)
   
   return {
     stroke: { width: 0 },
-    labels: ['Operational', 'Networking', 'Hiring', 'R&D'],
+    labels: ['Total Customer', 'Total Vendor', 'Total Delivery Man'],
     colors: [donutColors.series1, donutColors.series5, donutColors.series3, donutColors.series2],
     dataLabels: {
       enabled: true,
@@ -56,8 +63,8 @@ const expenseRationChartConfig = computed(() => {
             total: {
               show: true,
               fontSize: '1.125rem',
-              label: 'Operational',
-              formatter: () => '31%',
+              label: 'Total User',
+              formatter: () => totalValue,
               color: themePrimaryTextColor,
             },
           },
@@ -106,19 +113,31 @@ const expenseRationChartConfig = computed(() => {
   }
 })
 
+
 const series = [
-  85,
-  16,
-  50,
-  50,
+overviewData.getTotalCustomerCount,
+overviewData.getTotalVendorCount,
+overviewData.getTotalDeliveryManCount,
 ]
+
+
+
 </script>
 
 <template>
-  <VueApexCharts
-    type="donut"
-    height="410"
-    :options="expenseRationChartConfig"
-    :series="series"
-  />
+  <VCard>
+    <VCardText>
+      <div class="d-flex flex-column justify-space-between">
+          <h5 class="text-h5">
+            User Overview
+          </h5>
+      </div>
+    <VueApexCharts
+      type="donut"
+      height="410"
+      :options="expenseRationChartConfig"
+      :series="series"
+    />
+  </VCardText>
+</VCard>
 </template>

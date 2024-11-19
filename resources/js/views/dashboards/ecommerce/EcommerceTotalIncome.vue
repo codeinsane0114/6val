@@ -23,7 +23,8 @@ const series = [{
     5700,
     5700,
   ],
-}]
+},
+]
 
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors

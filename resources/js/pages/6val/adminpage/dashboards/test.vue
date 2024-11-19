@@ -8,10 +8,11 @@ import AdminWallet from '@/views/dashboards/test/AdminWallet.vue'
 import EarningStatics from '@/views/dashboards/test/EarningStatics.vue'
 import OrderStatistics from '@/views/dashboards/test/OrderStatistics.vue'
 import { useStore } from 'vuex'
-// import { dashboardConfigStore } from '@core/stores/config'
+// import store from '@/main/store'
 
 
-// const store = useStore();
+
+ const store = useStore();
 // let dashboarddata = ref('');
 // let isVisible=ref(false);
 // const fetchdata = async () => {
@@ -24,16 +25,10 @@ import { useStore } from 'vuex'
 //     console.error(err)
 //   }
 // }
-// onMounted(async() => {
-//     console.log("onMounted==============>")
-//     fetchdata();
-//     store.dispatch("dashboard/getOrderStatusData");
-//     console.log("statusdata================>",store.state.dashboard.orderStatus)
-// });
-
-// const ConfigStore = dashboardConfigStore();
-// ConfigStore.orderStatus = dashboarddata;
-// console.log("configstore=======================>",ConfigStore.orderStatus);
+onMounted(async() => {
+    store.dispatch("dashboard/getOrderStatusData");
+    store.dispatch("dashboard/getAdminWalletData");
+});
 </script>
 
 <template>

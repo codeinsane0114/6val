@@ -42,7 +42,6 @@ const series = [{
 
 const store = useStore();
 const data = store.state.dashboard.orderStatus;
-console.log('data',data);
 
 const chartOptions = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors

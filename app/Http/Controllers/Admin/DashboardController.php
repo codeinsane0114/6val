@@ -210,7 +210,10 @@ class DashboardController extends BaseController
         $inHouseOrderEarningArray = array_values($inHouseOrderEarningArray);
         $vendorOrderEarningArray = array_values($vendorOrderEarningArray);
         return response()->json([
-            'view' => view(Dashboard::ORDER_STATISTICS[VIEW], compact('inHouseOrderEarningArray','vendorOrderEarningArray','label','dateType'))->render(),
+            'inHouseOrderEarningArray' => $inHouseOrderEarningArray,
+            'vendorOrderEarningArray' => $vendorOrderEarningArray,
+            'label' => $label,
+            'dateType' => $dateType
         ]);
     }
     public function getEarningStatistics(Request $request):JsonResponse

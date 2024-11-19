@@ -1,213 +1,138 @@
 <script setup>
 import { useTheme } from 'vuetify'
-import { hexToRgb } from '@core/utils/colorConverter'
+import { ref, watch } from 'vue';
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+const data = store.state.dashboard.orderStatics
+console.log('storeData================>',data)
+
+const colorVariables = themeColors => {
+  const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
+  const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
+  const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
+  const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
+  
+  return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
+}
 
 const vuetifyTheme = useTheme()
+const chartConfig = computed(() =>{
+  const scatterColors = {
+    series1: '#ff9f43',
+    series2: '#7367f0',
+    series3: '#28c76f',
+  }
 
-const seriesYear = [
-  {
-    name: 'Last Month',
-    data: [
-      20,
-      54,
-      22,
-      40,
-      20,
-      25,
-      16,
-      22,
-      20,
-      25,
-      16,
-      22,
-      14
-    ],
-  },
-  {
-    name: 'This Month',
-    data: [
-      20,
-      38,
-      27,
-      65,
-      43,
-      48,
-      32,
-      70,
-      43,
-      48,
-      32,
-      70,
-      48,
-    ],
-  },
-]
-
-const xaxisMonth =  [
-        '',
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Augu',
-        'septem',
-        'Octo',
-        'Nov',
-        'Dec'
-      ]
-const xaxisWeek =  [
-        '',
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-      ]
-      
-
-const chartOptions = computed(() => {
-  const currentTheme = vuetifyTheme.current.value.colors
-  const variableTheme = vuetifyTheme.current.value.variables
-  const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
-  const borderColor = `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`
+  const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value)
   
   return {
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false },
-      dropShadow: {
-        top: 14,
-        blur: 4,
-        left: 0,
+      zoom: {
+        type: 'xy',
         enabled: true,
-        opacity: 0.04,
-        enabledOnSeries: [1],
-        color: '#000',
       },
     },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left',
+      markers: { offsetX: -3 },
+      fontSize: '13px',
+      labels: { colors: themeSecondaryTextColor },
+      itemMargin: {
+        vertical: 3,
+        horizontal: 10,
+      },
+    },
+    colors: [scatterColors.series1, scatterColors.series2, scatterColors.series3],
     grid: {
-      show: false,
-      padding: {
-        left: -7,
-        top: -37,
-        right: 34,
-        bottom: 10,
+      borderColor: themeBorderColor,
+      xaxis: {
+        lines: { show: true },
       },
     },
-    legend: { show: false },
-    colors: [
-      borderColor,
-      `rgba(${ hexToRgb(String(currentTheme.primary)) }, 1)`,
-    ],
-    markers: {
-      size: 6,
-      strokeWidth: 5,
-      strokeOpacity: 1,
-      hover: { size: 6 },
-      colors: ['transparent'],
-      strokeColors: 'transparent',
-      discrete: [
-        {
-          size: 6,
-          seriesIndex: 1,
-          fillColor: '#fff',
-          strokeColor: currentTheme.primary,
-          dataPointIndex: seriesYear[0].data.length - 1,
-        },
-        {
-          size: 6,
-          seriesIndex: 1,
-          dataPointIndex: 3,
-          fillColor: '#fff',
-          strokeColor: '#000',
-        },
-      ],
-    },
-    stroke: {
-      width: [
-        3,
-        5,
-      ],
-      curve: 'smooth',
-      lineCap: 'round',
-      dashArray: [
-        8,
-        0,
-      ],
+    yaxis: {
+      labels: {
+        style: { fontSize: '0.8125rem', colors: themeDisabledTextColor },
+      },
     },
     xaxis: {
-      axisTicks: { show: true },
+      tickAmount: 10,
       axisBorder: { show: true },
-      categories: xaxisMonth,
+      axisTicks: { color: themeBorderColor },
+      crosshairs: {
+        stroke: { color: themeBorderColor },
+      },
+      categories: data.label,
       labels: {
-        style: {
-          fontSize: '15px',
-          colors: disabledTextColor,
-          fontFamily: 'Public Sans',
-        },
+        style: { colors: themeDisabledTextColor },
+        // formatter: val => Number.parseFloat(val).toFixed(1),
       },
     },
-    yaxis: { labels: { show: true } },
   }
 })
 
-const moreList = [
+const series = [
   {
-    title: 'ThisMonth',
-    value: 'month',
+    name: 'Inhouse',
+    data: data.inHouseOrderEarningArray,
   },
   {
-    title: 'ThisYear',
-    value: 'year',
-  },
-  {
-    title: 'ThisWeek',
-    value: 'week',
+    name: 'Vendor',
+    data: data.vendorOrderEarningArray,
   },
 ]
+
+const dateType = ref('yearEarn');
+
+      const btnclickW = () =>{
+        dateType.value = 'WeekEarn';
+      }
+
+      const btnclickM = () =>{
+        dateType.value = 'MonthEarn';
+      }
+
+      const btnclickY = () =>{
+        dateType.value = 'yearEarn';
+      }
+
+      watch(dateType, async (newVal, oldVal) => {
+          store.dispatch('dashboard/getOrderStaticsData',newVal);
+      });
+
+
 </script>
 
 <template>
-  <VCard title="Oder statics">
-    <template #append>
-      <MoreBtn :menu-list="moreList" />
-    </template>
+  <VCard>
+        <VCardItem class="d-flex flex-wrap justify-space-between gap-4">
+          <VCardTitle>Order Statics</VCardTitle>
 
-    <VCardText>
-      <div class="d-flex align-center gap-2 mb-1">
-        <h2 class="text-h2">
-          4.0
-        </h2>
+          <template #append>
+            <VBtnToggle
+              density="compact"
+              color="primary"
+              variant="outlined"
+              divided
+            >
+              <VBtn @click = btnclickW >Weekely</VBtn>
+              <VBtn @click = btnclickM >Monthly</VBtn>
+              <VBtn @click = btnclickY >Yearly</VBtn>
+            </VBtnToggle>
+          </template>
+        </VCardItem>
 
-        <VRating
-          readonly
-          :model-value="4"
-          density="comfortable"
-          color="#22303E29"
-        />
-      </div>
-      <div class="d-flex  align-center gap-2">
-        <VChip
-          label
-          size="small"
-          color="primary"
-        >
-          +5.0
-        </VChip>
-        <span class="text-base">Points from last month</span>
-      </div>
-    </VCardText>
-
-    <VueApexCharts
-      type="line"
-      :height="246"
-      :options="chartOptions"
-      :series="seriesYear"
-    />
-  </VCard>
+        <VCardText>
+          <VueApexCharts
+            type="area"
+            height="400"
+            :options="chartConfig"
+            :series="series"
+          />
+        </VCardText>
+      </VCard>
 </template>

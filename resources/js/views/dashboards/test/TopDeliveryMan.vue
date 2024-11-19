@@ -71,10 +71,8 @@ const moreList = [
   <VCard>
     <VCardItem>
       <VCardTitle>
-        Sales by Countries
+        Top Delivery Man
       </VCardTitle>
-      <VCardSubtitle>Monthly Sales Overview</VCardSubtitle>
-
       <template #append>
         <MoreBtn :menu-list="moreList" />
       </template>
