@@ -1,12 +1,14 @@
 <script setup>
 import TopProducs from '@/views/dashboards/test/TopProducts.vue'
-import TopDeliveryMan from '@/views/dashboards/test/TopDeliveryMan.vue'
-import SystemTabs from '@/views/dashboards/test/SystemTabs.vue'
 import BusinessAlalistics from '@/views/dashboards/test/BusinessAnalistics.vue'
 import UserOverview from '@/views/dashboards/test/UserOverview.vue'
 import AdminWallet from '@/views/dashboards/test/AdminWallet.vue'
 import EarningStatics from '@/views/dashboards/test/EarningStatics.vue'
 import OrderStatistics from '@/views/dashboards/test/OrderStatistics.vue'
+import TopCustomers from '@/views/dashboards/test/TopCustomers.vue'
+import MostPopularStore from '@/views/dashboards/test/MostPopularStore.vue'
+import TopSellingStore from '@/views/dashboards/test/TopSellingStore.vue'
+import MostPopularProducts from '@/views/dashboards/test/MostPopularProducts.vue'
 import { useStore } from 'vuex'
 // import store from '@/main/store'
 
@@ -69,15 +71,23 @@ onMounted(async() => {
   <VCol cols="12" md="12">
     <EarningStatics />
   </VCol>
-  <VCol cols="12" md="12">
-      <SystemTabs />
+  <VCol cols="12" md="4">
+      <TopCustomers/>
   </VCol>
 
     <VCol
       cols="12"
-      md="8"
+      md="4"
     >
-      <TopProducs />
+      <MostPopularStore/>
+    </VCol>
+
+    <VCol cols="12" md="4">
+      <TopSellingStore />
+    </VCol>
+
+    <VCol cols="12" md="4">
+      <MostPopularProducts />
     </VCol>
 
     <!-- 👉 Top Delivery Man -->
@@ -85,7 +95,7 @@ onMounted(async() => {
       cols="12"
       md="4"
     >
-      <TopDeliveryMan />
+      <TopSellingStore />
     </VCol>
   </VRow>
 </template>

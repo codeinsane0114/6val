@@ -180,7 +180,7 @@ const topSellingStoreData = [
 ]
 
 const tableData = computed(() => {
-  return tabs.value === 'Customer' ? customerData : tabs.value === 'Popular Stores' ? popularstoreData : topSellingStoreData
+  return tabs.value === 'Customer' ? store.state.dashboard.adminWalletData.data.top_customer : tabs.value === 'Popular Stores' ? store.state.dashboard.adminWalletData.data.top_store_by_order_received : store.state.dashboard.adminWalletData.data.topVendorByEarning
 })
 </script>
 
@@ -247,7 +247,7 @@ const tableData = computed(() => {
             <div class="d-flex align-center gap-3">
               <div>
                 <VImg
-                  :src="data.image"
+                  :src="data.src"
                   width="24"
                   height="24"
                 />
