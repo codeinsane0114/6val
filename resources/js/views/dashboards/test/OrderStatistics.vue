@@ -66,7 +66,7 @@ const chartConfig = computed(() =>{
       crosshairs: {
         stroke: { color: themeBorderColor },
       },
-      categories: data.label,
+      categories: data?.label ? data.label : null,
       labels: {
         style: { colors: themeDisabledTextColor },
         // formatter: val => Number.parseFloat(val).toFixed(1),
@@ -78,11 +78,11 @@ const chartConfig = computed(() =>{
 const series = [
   {
     name: 'Inhouse',
-    data: data.inHouseOrderEarningArray,
+    data: data?.inHouseOrderEarningArray ? data.inHouseOrderEarningArray : null,
   },
   {
     name: 'Vendor',
-    data: data.vendorOrderEarningArray,
+    data: data?.vendorOrderEarningArray ? data.vendorOrderEarningArray : null,
   },
 ]
 

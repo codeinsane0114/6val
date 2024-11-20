@@ -30,6 +30,8 @@ import { useStore } from 'vuex'
 onMounted(async() => {
     store.dispatch("dashboard/getOrderStatusData");
     store.dispatch("dashboard/getAdminWalletData");
+    store.dispatch('dashboard/getOrderStaticsData','yearEarn')
+    console.log(store.state.dashboard.adminWalletData)
 });
 </script>
 

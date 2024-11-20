@@ -4,7 +4,7 @@ import { useStore } from 'vuex'
 
 const store = useStore();
 
-const overviewData = store.state.dashboard.adminWalletData.data
+const overviewData = store.state.dashboard.adminWalletData
 
 const colorVariables = themeColors => {
   const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
@@ -25,7 +25,7 @@ const expenseRationChartConfig = computed(() => {
     series5: '#ffa1a1',
   }
 
-  const totalValue = overviewData.getTotalCustomerCount+overviewData.getTotalVendorCount+overviewData.getTotalDeliveryManCount
+  const totalValue = overviewData?.data ? overviewData.data.getTotalCustomerCount+overviewData.data.getTotalVendorCount+overviewData.data.getTotalDeliveryManCount : null
 
   const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value)
   
@@ -115,9 +115,9 @@ const expenseRationChartConfig = computed(() => {
 
 
 const series = [
-overviewData.getTotalCustomerCount,
-overviewData.getTotalVendorCount,
-overviewData.getTotalDeliveryManCount,
+overviewData?.data ? overviewData.data.getTotalCustomerCount : null,
+overviewData?.data ? overviewData.data.getTotalVendorCount : null,
+overviewData?.data ? overviewData.data.getTotalDeliveryManCount : null,
 ]
 
 

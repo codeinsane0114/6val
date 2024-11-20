@@ -118,4 +118,8 @@ export default defineConfig({
       './resources/js/**/*.vue',
     ],
   },
+  server: {
+    host: '192.168.145.92',  // Listen on all interfaces
+    port: 5173,        // Ensure this port is available
+  },
 })

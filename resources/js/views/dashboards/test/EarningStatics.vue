@@ -4,7 +4,7 @@ import { useStore } from 'vuex'
 const store = useStore()
 
 var earningStaticsData = store.state.dashboard.adminWalletData
-console.log('==================>',Object.values(earningStaticsData.vendorEarning))
+console.log('==================>',Object.values(earningStaticsData?.vendorEarning ? earningStaticsData.vendorEarning : {}))
 
 
 const colorVariables = themeColors => {
@@ -65,7 +65,7 @@ const chartConfig = computed(() =>{
       crosshairs: {
         stroke: { color: themeBorderColor },
       },
-      categories: earningStaticsData.label,
+      categories: earningStaticsData?.label ? earningStaticsData.label : null,
       labels: {
         style: { colors: themeDisabledTextColor },
         // formatter: val => Number.parseFloat(val).toFixed(1),
@@ -77,15 +77,15 @@ const chartConfig = computed(() =>{
 const series = [
   {
     name: 'Inhouse',
-    data: Object.values(earningStaticsData.inHouseOrderEarningArray)
+    data: Object.values(earningStaticsData?.inHouseOrderEarningArray ? earningStaticsData.inHouseOrderEarningArray : {})
   },
   {
     name: 'Vendor',
-    data: Object.values(earningStaticsData.vendorEarning)
+    data: Object.values(earningStaticsData?.vendorEarning ?  earningStaticsData.vendorEarning : {})
   },
   {
     name: 'Commission',
-    data: Object.values(earningStaticsData.commissionEarn)
+    data: Object.values(earningStaticsData?.commissionEarn ? earningStaticsData.commissionEarn : {})
   },
 ]
 

@@ -20,141 +20,18 @@ import FailedtoDelivery from '@images/backendImg/failed-to-deliver.png'
 import { useStore } from 'vuex'
 
 
-const vuetifyTheme = useTheme()
-
-const series = [{
-  name: 'Income',
-  data: [
-    3350,
-    3350,
-    4800,
-    4800,
-    2950,
-    2950,
-    1800,
-    1800,
-    3750,
-    3750,
-    5700,
-    5700,
-  ],
-}]
 
 const store = useStore();
 const data = store.state.dashboard.orderStatus;
-
-const chartOptions = computed(() => {
-  const currentTheme = vuetifyTheme.current.value.colors
-  const variableTheme = vuetifyTheme.current.value.variables
-  const disabledTextColor = `rgba(${ hexToRgb(String(currentTheme['on-surface'])) },${ variableTheme['disabled-opacity'] })`
-  const borderColor = `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`
-  
-  return {
-    chart: {
-      parentHeightOffset: 0,
-      toolbar: { show: false },
-      offsetY: 10,
-      offsetX: -14,
-      dropShadow: {
-        top: 14,
-        left: 0,
-        blur: 4,
-        opacity: 0.15,
-        enabled: true,
-        color: currentTheme.primary,
-      },
-    },
-    dataLabels: { enabled: false },
-    stroke: {
-      width: 4,
-      curve: 'straight',
-    },
-    grid: {
-      borderColor,
-      padding: {
-        top: 5,
-        right: 6,
-        bottom: 7,
-      },
-    },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        opacityTo: 0.25,
-        opacityFrom: 0.5,
-        stops: [
-          0,
-          95,
-          100,
-        ],
-        shadeIntensity: 0.6,
-        colorStops: [[
-          {
-            offset: 0,
-            opacity: 0.2,
-            color: currentTheme.primary,
-          },
-          {
-            opacity: 0,
-            offset: 100,
-            color: currentTheme.surface,
-          },
-        ]],
-      },
-    },
-    theme: {
-      monochrome: {
-        enabled: true,
-        shadeTo: 'light',
-        shadeIntensity: 1,
-        color: currentTheme.primary,
-      },
-    },
-    xaxis: {
-      axisTicks: { show: false },
-      axisBorder: { show: false },
-      categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ],
-      labels: {
-        style: {
-          fontSize: '13px',
-          colors: disabledTextColor,
-          fontFamily: 'Public Sans',
-        },
-      },
-    },
-    yaxis: {
-      labels: {
-        formatter: value => `${ value / 1000 }k`,
-        style: {
-          fontSize: '13px',
-          colors: disabledTextColor,
-          fontFamily: 'Public Sans',
-        },
-      },
-    },
-  }
-})
+console.log("orderstatus=====================>", data);
 
 const reportData = [
   {
     title: 'Pending',
     avatarWidth: 20,
-    stats: data.pending,
+    stats: '$38,658',
     avatarHeight: 24,
-    trendNumber: data.pending,
+    trendNumber: data?.customer ? data.pending : null ,
     avatarSrc: Pending,
   },
   {
@@ -162,7 +39,7 @@ const reportData = [
     title: 'Confirmed',
     stats: '$38,658',
     avatarHeight: 17,
-    trendNumber: data.confirmed,
+    trendNumber: data?.customer ? data.confirmed : null,
     avatarSrc: Confirmed,
   },
   {
@@ -170,7 +47,7 @@ const reportData = [
     avatarWidth: 24,
     stats: '$18,220',
     avatarHeight: 21,
-    trendNumber: data.processing,
+    trendNumber: data?.customer ? data.processing : null,
     avatarSrc: Packaging,
   },
   {
@@ -178,7 +55,7 @@ const reportData = [
     avatarWidth: 24,
     stats: '$18,220',
     avatarHeight: 21,
-    trendNumber: data.out_for_delivery,
+    trendNumber: data?.customer ? data.out_for_delivery : null,
     avatarSrc: Outofdelivery,
   },
   {
@@ -186,7 +63,7 @@ const reportData = [
     avatarWidth: 24,
     stats: '$18,220',
     avatarHeight: 21,
-    trendNumber: data.delivered,
+    trendNumber: data?.customer ? data.delivered : null,
     avatarSrc: Deliverd,
   },
   {
@@ -194,7 +71,7 @@ const reportData = [
     avatarWidth: 24,
     stats: '$18,220',
     avatarHeight: 21,
-    trendNumber: data.canceled,
+    trendNumber: data?.customer ? data.canceled : null,
     avatarSrc: Canceled,
   },
   {
@@ -202,7 +79,7 @@ const reportData = [
     avatarWidth: 24,
     stats: '$18,220',
     avatarHeight: 21,
-    trendNumber: data.returned,
+    trendNumber: data?.customer ? data.returned : null,
     avatarSrc: Returned,
   },
   {
@@ -210,7 +87,7 @@ const reportData = [
     avatarWidth: 24,
     stats: '$18,220',
     avatarHeight: 21,
-    trendNumber: data.failed,
+    trendNumber: data?.customer ? data.failed : null,
     avatarSrc: FailedtoDelivery,
   },
 ]
@@ -219,7 +96,7 @@ const logisticData = [
     avatarSrc: TotalOrder,
     color: 'primary',
     title: 'Total Order',
-    value: data.order,
+    value: data?.customer ? data.order : null,
     change: 18.2,
     isHover: true,
   },
@@ -227,7 +104,7 @@ const logisticData = [
     avatarSrc: TotalStore,
     color: 'primary',
     title: 'Total Stores',
-    value: data.store,
+    value: data?.customer ? data.store : null,
     change: -8.7,
     isHover: false,
   },
@@ -235,7 +112,7 @@ const logisticData = [
     avatarSrc: TotalProduct,
     color: 'primary',
     title: 'Total Products',
-    value: data.product,
+    value: data?.customer ? data.product : null,
     change: 4.3,
     isHover: false,
   },
@@ -243,7 +120,7 @@ const logisticData = [
     avatarSrc: TotalCustomer,
     color: 'info',
     title: 'Total Customers',
-    value: data.customer,
+    value: data?.customer ? data.customer : null,
     change: -2.5,
     isHover: false,
   },

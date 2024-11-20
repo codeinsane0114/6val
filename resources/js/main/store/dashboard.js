@@ -20,9 +20,9 @@ export default {
 	namespaced: true,
 	state() {
 		return {
-            orderStatus: getJSONFromLocalStorage(ORDER_STATUS) || ['iniData'],
-            adminWalletData: getJSONFromLocalStorage(ADMIN_WALLET) || ['initData'],
-			orderStatics: getJSONFromLocalStorage(ORDER_STATICS) || ['initData']
+            orderStatus: getJSONFromLocalStorage(ORDER_STATUS) || null,
+            adminWalletData: getJSONFromLocalStorage(ADMIN_WALLET) || null,
+			orderStatics: getJSONFromLocalStorage(ORDER_STATICS) || null
 		}
 	},
 
