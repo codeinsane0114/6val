@@ -6,7 +6,7 @@ enum Customer
 {
     const LIST = [
         URI => 'list',
-        VIEW => 'admin-views.customer.list'
+        VIEW => ''
     ];
 
     const VIEW = [

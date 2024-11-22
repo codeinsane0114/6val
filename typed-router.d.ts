@@ -46,6 +46,7 @@ declare module 'vue-router/auto-routes' {
     '6val-adminpage-apps-permissions': RouteRecordInfo<'6val-adminpage-apps-permissions', '/6val/adminpage/apps/permissions', Record<never, never>, Record<never, never>>,
     '6val-adminpage-apps-roles': RouteRecordInfo<'6val-adminpage-apps-roles', '/6val/adminpage/apps/roles', Record<never, never>, Record<never, never>>,
     '6val-adminpage-apps-user-list': RouteRecordInfo<'6val-adminpage-apps-user-list', '/6val/adminpage/apps/user/list', Record<never, never>, Record<never, never>>,
+    '6val-adminpage-apps-user-list-index-test': RouteRecordInfo<'6val-adminpage-apps-user-list-index-test', '/6val/adminpage/apps/user/list/indexTest', Record<never, never>, Record<never, never>>,
     '6val-adminpage-apps-user-view-id': RouteRecordInfo<'6val-adminpage-apps-user-view-id', '/6val/adminpage/apps/user/view/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '6val-adminpage-charts-apex-chart': RouteRecordInfo<'6val-adminpage-charts-apex-chart', '/6val/adminpage/charts/apex-chart', Record<never, never>, Record<never, never>>,
     '6val-adminpage-charts-chartjs': RouteRecordInfo<'6val-adminpage-charts-chartjs', '/6val/adminpage/charts/chartjs', Record<never, never>, Record<never, never>>,

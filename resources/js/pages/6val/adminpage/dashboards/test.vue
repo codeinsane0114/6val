@@ -31,6 +31,7 @@ onMounted(async() => {
     store.dispatch("dashboard/getOrderStatusData");
     store.dispatch("dashboard/getAdminWalletData");
     store.dispatch('dashboard/getOrderStaticsData','yearEarn')
+    store.dispatch("customer/getAllCustomerList");
     console.log(store.state.dashboard.adminWalletData)
 });
 </script>

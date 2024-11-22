@@ -73,9 +73,10 @@ class CustomerController extends BaseController
             relations: ['orders'],
             dataLimit: getWebConfig(name: 'pagination_limit')
         );
-        return view(Customer::LIST[VIEW], [
-            'customers' => $customers,
-        ]);
+        // return view(Customer::LIST[VIEW], [
+        //     'customers' => $customers,
+        // ]);
+        return response()->json(['customers'=>$customers]);
     }
 
     public function updateStatus(Request $request): JsonResponse
@@ -120,7 +121,8 @@ class CustomerController extends BaseController
                 $orderStatusArray['total_order']++;
             });
             $orders = $this->orderRepo->getListWhere(orderBy:['id'=>'desc'],searchValue:$request['searchValue'], filters: ['customer_id'=>$id,'is_guest'=>'0'],dataLimit: getWebConfig('pagination_limit'));
-            return view(Customer::VIEW[VIEW],compact('customer','orders','orderStatusArray'));
+            // return view(Customer::VIEW[VIEW],compact('customer','orders','orderStatusArray'));
+            return response()->json(['customer'=>$customer,'orders'=>$orders,'orderStatusArray'=>$orderStatusArray],201);
         }
         Toastr::error(translate('customer_Not_Found'));
         return back();
@@ -236,10 +238,18 @@ class CustomerController extends BaseController
 
     public function getCustomerList(Request $request): JsonResponse
     {
-        $allCustomer = ['id' => 'all', 'text' => 'All customer'];
-        $customers = $this->customerRepo->getCustomerNameList(request: $request)->toArray();
-        array_unshift($customers, $allCustomer);
-        return response()->json($customers);
+        // $allCustomer = ['id' => 'all', 'text' => 'All customer'];
+        // $customers = $this->customerRepo->getList(request: $request)->toArray();
+        // $customers = $this->customerRepo->getCustomerListAll(request: $request)->toArray();
+        // array_unshift($customers, $allCustomer);
+        // return response()->json($customers);
+        $customers = $this->customerRepo->getListWhere(
+            searchValue: $request->get('searchValue'),
+            filters: ['withCount'=>'orders'],
+            relations: ['orders'],
+            dataLimit: getWebConfig(name: 'pagination_limit')
+        );
+        return response()->json(['customers'=>$customers]);
     }
     public function getCustomerListWithoutAllCustomerName(Request $request): JsonResponse
     {

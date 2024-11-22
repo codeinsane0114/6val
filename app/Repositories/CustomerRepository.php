@@ -87,6 +87,26 @@ class CustomerRepository implements CustomerRepositoryInterface
             })
             ->limit($dataLimit)
             ->get([DB::raw('id,IF(id <> "0", CONCAT(f_name, " ", l_name, " (", phone ,")"),CONCAT(f_name, " ", l_name)) as text')]);
+            // ->get();
+            
+    }
+
+    public function getCustomerListAll(object $request, int|string $dataLimit = DEFAULT_DATA_LIMIT): object
+    {
+        $searchValue = explode(' ', $request['searchValue']);
+        return $this->user->where('id','!=',0)
+            ->where(function ($query) use ($searchValue) {
+                foreach ($searchValue as $value) {
+                    $query->orWhere('f_name', 'like', "%$value%")
+                        ->orWhere('l_name', 'like', "%$value%")
+                        ->orWhere('phone', 'like', "%$value%");
+                }
+            })
+            ->limit($dataLimit)
+            ->get();
+            // ->get([DB::raw('id,IF(id <> "0", CONCAT(f_name, " ", l_name, " (", phone ,")"),CONCAT(f_name, " ", l_name)) as text')]);
+            
+            
     }
 
     public function deleteAuthAccessTokens(string|int $id): bool

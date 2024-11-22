@@ -8395,4 +8395,5 @@ return [
 	"terms_and_Condition" => "Terms and Condition",
 	"The_phone_number_may_not_be_greater_than_20_characters" => "The phone number may not be greater than 20 characters",
 	"registration_successful" => "Registration successful",
+	"You_have_not_any_order_yet" => "You have not any order yet",
 ];

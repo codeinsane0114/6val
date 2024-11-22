@@ -1,5 +1,6 @@
 import { createStore } from 'vuex';
 import dashboard from './dashboard';
+import customer from './customer';
 
 // const allModules = window.config.modules;
 var allModulesStores = {};
@@ -14,6 +15,7 @@ var allModulesStores = {};
 export default createStore({
 	modules: {
 		dashboard,
+		customer,
 		...allModulesStores
 	}
 })

@@ -361,7 +361,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
     });
 
     // Customer Routes, Customer wallet Routes, Customer Loyalty Routes
-    Route::group(['prefix' => 'customer', 'as' => 'customer.','middleware'=>['module:user_section']], function () {
+    Route::group(['prefix' => 'customer', 'as' => 'customer.'], function () {
+        // Route::group(['prefix' => 'customer', 'as' => 'customer.','middleware'=>['module:user_section']], function () {
         Route::controller(CustomerController::class)->group(function (){
             Route::get(Customer::LIST[URI], 'getListView')->name('list');
             Route::get(Customer::VIEW[URI].'/{user_id}', 'getView')->name('view');

@@ -9,7 +9,8 @@ const searchQuery = ref('')
 const selectedRole = ref()
 const selectedPlan = ref()
 const selectedStatus = ref()
-const listData = store.state.customer.allCustomers; 
+
+const listData = ref('')
 
 // Data table options
 const itemsPerPage = ref(10)
@@ -25,13 +26,13 @@ const updateOptions = options => {
 
 // Headers
 const headers = [
-{
+  {
     title: 'Customer',
     key: 'customer',
   },
   {
-    title: 'Country',
-    key: 'country',
+    title: 'Email',
+    key: 'email',
   },
   {
     title: 'Phone',
@@ -130,7 +131,7 @@ const status = [
 ]
 
 const resolveUserRoleVariant = role => {
-  const roleLowerCase = 'editor'
+  const roleLowerCase = role.toLowerCase()
   if (roleLowerCase === 'subscriber')
     return {
       color: 'success',
@@ -199,15 +200,69 @@ const deleteUser = async id => {
   fetchUsers()
 }
 
+
+
 onMounted(async() => {
     store.dispatch("customer/getAllCustomerList");
-    
     console.log('allcustomers',listData)
 });
 </script>
 
 <template>
   <section>
+    <!-- 👉 Widgets -->
+    <!-- <div class="d-flex mb-6">
+      <VRow>
+        <template
+          v-for="(data, id) in widgetData"
+          :key="id"
+        >
+          <VCol
+            cols="12"
+            md="3"
+            sm="6"
+          >
+            <VCard>
+              <VCardText>
+                <div class="d-flex justify-space-between">
+                  <div class="d-flex flex-column gap-y-1">
+                    <div class="text-body-1 text-high-emphasis">
+                      {{ data.title }}
+                    </div>
+                    <div class="d-flex gap-x-2 align-center">
+                      <h4 class="text-h4">
+                        {{ data.value }}
+                      </h4>
+                      <div
+                        class="text-base"
+                        :class="data.change > 0 ? 'text-success' : 'text-error'"
+                      >
+                        ({{ prefixWithPlus(data.change) }}%)
+                      </div>
+                    </div>
+                    <div class="text-sm">
+                      {{ data.desc }}
+                    </div>
+                  </div>
+                  <VAvatar
+                    :color="data.iconColor"
+                    variant="tonal"
+                    rounded
+                    size="40"
+                  >
+                    <VIcon
+                      :icon="data.icon"
+                      size="24"
+                    />
+                  </VAvatar>
+                </div>
+              </VCardText>
+            </VCard>
+          </VCol>
+        </template>
+      </VRow>
+    </div> -->
+
     <VCard class="mb-6">
       <VCardItem class="pb-4">
         <VCardTitle>Filters</VCardTitle>
@@ -310,34 +365,27 @@ onMounted(async() => {
         v-model:items-per-page="itemsPerPage"
         v-model:model-value="selectedRows"
         v-model:page="page"
-        :items="listData?.total ? listData.data : [{id : 1, 
-                                                   image_full_url:{path: 'http://localhost/6val/storage/app/public/profile/2024-11-21-673f6cf5a5ef5.webp'},
-                                                   name:'Vlady slav', 
-                                                   email:'customer@customer.com',
-                                                   country: 'USA',
-                                                   phone: 12345678,
-                                                   orders_count:0
-                                                   }]"
+        :items="users"
         item-value="id"
-        :items-length="listData?.data ? listData.data.total : null"
+        :items-length="totalUsers"
         :headers="headers"
         class="text-no-wrap"
         show-select
         @update:options="updateOptions"
       >
-        <!-- customer -->
-        <template #item.customer="{ item }">
+        <!-- User -->
+        <template #item.user="{ item }">
           <div class="d-flex align-center gap-x-4">
             <VAvatar
               size="34"
-              :variant="!item.image_full_url.path ? 'tonal' : undefined"
-              :color="!item.image_full_url.path ? resolveUserRoleVariant(item.role).color : undefined"
+              :variant="!item.avatar ? 'tonal' : undefined"
+              :color="!item.avatar ? resolveUserRoleVariant(item.role).color : undefined"
             >
               <VImg
-                v-if="item.image_full_url.path"
-                :src="item.image_full_url.path"
+                v-if="item.avatar"
+                :src="item.avatar"
               />
-              <span v-else>{{ avatarText(item.name) }}</span>
+              <span v-else>{{ avatarText(item.fullName) }}</span>
             </VAvatar>
             <div class="d-flex flex-column">
               <h6 class="text-base">
@@ -345,7 +393,7 @@ onMounted(async() => {
                   :to="{ name: '6val-adminpage-apps-user-view-id', params: { id: item.id } }"
                   class="font-weight-medium text-link"
                 >
-                  {{ item.name }}
+                  {{ item.fullName }}
                 </RouterLink>
               </h6>
               <div class="text-sm">
@@ -356,30 +404,36 @@ onMounted(async() => {
         </template>
 
         <!-- 👉 Role -->
-        <template #item.country="{ item }">
+        <template #item.role="{ item }">
           <div class="d-flex align-center gap-x-2">
+            <VIcon
+              :size="20"
+              :icon="resolveUserRoleVariant(item.role).icon"
+              :color="resolveUserRoleVariant(item.role).color"
+            />
+
             <div class="text-capitalize text-high-emphasis text-body-1">
-              {{ item.country }}
+              {{ item.role }}
             </div>
           </div>
         </template>
 
-        <!-- Phone -->
-        <template #item.phone="{ item }">
+        <!-- Plan -->
+        <template #item.plan="{ item }">
           <div class="text-body-1 text-high-emphasis text-capitalize">
-            {{ item.phone }}
+            {{ item.currentPlan }}
           </div>
         </template>
 
         <!-- Status -->
-        <template #item.totalorders="{ item }">
+        <template #item.status="{ item }">
           <VChip
-            :color="resolveUserStatusVariant('active')"
+            :color="resolveUserStatusVariant(item.status)"
             size="small"
             label
             class="text-capitalize"
           >
-            {{ item.orders_count }}
+            {{ item.status }}
           </VChip>
         </template>
 
@@ -425,7 +479,7 @@ onMounted(async() => {
           <TablePagination
             v-model:page="page"
             :items-per-page="itemsPerPage"
-            :total-items="listData?.total ? listData.total : 0"
+            :total-items="totalUsers"
           />
         </template>
       </VDataTableServer>
