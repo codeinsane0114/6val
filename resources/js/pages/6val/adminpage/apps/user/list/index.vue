@@ -9,7 +9,7 @@ const searchQuery = ref('')
 const selectedRole = ref()
 const selectedPlan = ref()
 const selectedStatus = ref()
-const listData = store.state.customer.allCustomers; 
+const listData = store.state.customer.allCustomers;
 
 // Data table options
 const itemsPerPage = ref(10)
