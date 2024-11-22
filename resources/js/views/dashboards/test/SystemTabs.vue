@@ -182,6 +182,9 @@ const topSellingStoreData = [
 const tableData = computed(() => {
   return tabs.value === 'Customer' ? store.state.dashboard.adminWalletData.data.top_customer : tabs.value === 'Popular Stores' ? store.state.dashboard.adminWalletData.data.top_store_by_order_received : store.state.dashboard.adminWalletData.data.topVendorByEarning
 })
+onMounted(async() => {
+    store.dispatch("dashboard/getAdminWalletData");
+});
 </script>
 
 <template>

@@ -106,7 +106,9 @@ const dateType = ref('yearEarn');
       watch(dateType, async (newVal, oldVal) => {
           store.dispatch('dashboard/getOrderStaticsData',newVal);
       });
-
+  onMounted(async() => {
+    store.dispatch("dashboard/getAdminWalletData");
+});
 
 </script>
 

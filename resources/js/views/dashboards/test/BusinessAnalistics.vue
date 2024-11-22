@@ -139,6 +139,9 @@ const moreList = [
     value: 'Last Year',
   },
 ]
+onMounted(async() => {
+    store.dispatch("dashboard/getOrderStatusData");
+});
 </script>
 
 <template>
@@ -193,14 +196,6 @@ const moreList = [
                     </div>
                     <div class="text-body-1 mb-2">
                     {{ data.title }}
-                    </div>
-                    <div class="d-flex gap-x-2 align-center">
-                    <h6 class="text-h6">
-                        {{ (data.change > 0) ? '+' : '' }} {{ data.change }}%
-                    </h6>
-                    <div class="text-disabled">
-                        than last week
-                    </div>
                     </div>
                 </VCardText>
                 </VCard>

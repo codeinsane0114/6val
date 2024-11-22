@@ -119,7 +119,9 @@ overviewData?.data ? overviewData.data.getTotalCustomerCount : null,
 overviewData?.data ? overviewData.data.getTotalVendorCount : null,
 overviewData?.data ? overviewData.data.getTotalDeliveryManCount : null,
 ]
-
+onMounted(async() => {
+    store.dispatch("dashboard/getAdminWalletData");
+});
 
 
 </script>

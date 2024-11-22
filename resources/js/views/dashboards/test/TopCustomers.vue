@@ -42,6 +42,10 @@ const logisticData = ref([
 const store = useStore();
 const data = store.state.dashboard.orderStatus;
 
+onMounted(async() => {
+    store.dispatch("dashboard/getOrderStatusData");
+});
+
 </script>
 
 <template>

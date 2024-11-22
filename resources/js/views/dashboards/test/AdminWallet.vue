@@ -199,6 +199,10 @@ const moreList = [
     value: 'Last Year',
   },
 ]
+
+onMounted(async() => {
+    store.dispatch("dashboard/getAdminWalletData");
+});
 </script>
 
 <template>
