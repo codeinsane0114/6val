@@ -1,4 +1,12 @@
 <script setup>
+
+const props = defineProps({
+  userData: {
+    type: Object,
+    required: true,
+  },
+})
+
 import UserInvoiceTable from './UserInvoiceTable.vue'
 import avatar1 from '@images/avatars/avatar-1.png'
 import avatar2 from '@images/avatars/avatar-2.png'
@@ -19,19 +27,19 @@ import xamarin from '@images/icons/project-icons/xamarin.png'
 
 const projectTableHeaders = [
   {
-    title: 'PROJECT',
+    title: 'Type',
     key: 'project',
   },
   {
-    title: 'LEADER',
+    title: 'Name',
     key: 'leader',
   },
   {
-    title: 'Team',
+    title: 'Phone',
     key: 'team',
   },
   {
-    title: 'PROGRESS',
+    title: 'Address',
     key: 'progress',
   },
   {
@@ -143,6 +151,65 @@ const projects = [
   },
 ]
 
+const logisticData = ref([
+  {
+    icon: 'bx-bxs-truck',
+    color: 'primary',
+    title: 'total_roder',
+    value: props.userData?.orderStatusArray ? props.userData.orderStatusArray.total_order : null,
+    change: 18.2,
+    isHover: false,
+  },
+  {
+    icon: 'bx-error',
+    color: 'warning',
+    title: 'completed',
+    value: props.userData?.orderStatusArray ? props.userData.orderStatusArray.completed : null,
+    change: -8.7,
+    isHover: false,
+  },
+  {
+    icon: 'bx-git-repo-forked',
+    color: 'error',
+    title: 'ongoing',
+    value: props.userData?.orderStatusArray ? props.userData.orderStatusArray.ongoing : null,
+    change: 4.3,
+    isHover: false,
+  },
+  {
+    icon: 'bx-time-five',
+    color: 'info',
+    title: 'refunded',
+    value: props.userData?.orderStatusArray ? props.userData.orderStatusArray.refunded : null,
+    change: -2.5,
+    isHover: false,
+  },
+  {
+    icon: 'bx-time-five',
+    color: 'info',
+    title: 'returned',
+    value: props.userData?.orderStatusArray ? props.userData.orderStatusArray.returned : null,
+    change: -2.5,
+    isHover: false,
+  },
+  {
+    icon: 'bx-time-five',
+    color: 'info',
+    title: 'failed',
+    value: props.userData?.orderStatusArray ? props.userData.orderStatusArray.failed : null,
+    change: -2.5,
+    isHover: false,
+  },
+  {
+    icon: 'bx-time-five',
+    color: 'info',
+    title: 'canceled',
+    value: props.userData?.orderStatusArray ? props.userData.orderStatusArray.canceled : null,
+    change: -2.5,
+    isHover: false,
+  },
+])
+
 const moreList = [
   {
     title: 'Download',
@@ -162,28 +229,7 @@ const moreList = [
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard title="Projects List">
-        <VCardItem class="pt-0">
-          <div class="d-flex justify-space-between align-center flex-wrap gap-4">
-            <AppSelect
-              :model-value="options.itemsPerPage"
-              :items="[
-                { value: 5, title: '5' },
-                { value: 10, title: '10' },
-                { value: 25, title: '25' },
-                { value: -1, title: 'All' },
-              ]"
-              style="inline-size: 5rem;"
-              @update:model-value="options.itemsPerPage = parseInt($event, 10)"
-            />
-            <div style="inline-size: 250px;">
-              <AppTextField
-                v-model="search"
-                placeholder="Search Project"
-              />
-            </div>
-          </div>
-        </VCardItem>
+      <VCard title="Saved Address list">
         <VDivider />
         <!-- 👉 User Project List Table -->
 
@@ -193,26 +239,26 @@ const moreList = [
           v-model:page="options.page"
           :headers="projectTableHeaders"
           :items-per-page="options.itemsPerPage"
-          :items="projects"
+          :items="props.userData.customer?.addresses ? props.userData.customer.addresses : [{address_type : 'office',
+                                                                                             country : 'ukraine',
+                                                                                             contact_person_name : 'Alex morgan',
+                                                                                             phone : '12345678',
+                                                                                             address : 'kyib',
+                                                                                             }]"
           item-value="name"
           hide-default-footer
           :search="search"
-          show-select
           class="text-no-wrap"
         >
-          <!-- projects -->
+          <!-- TYPE -->
           <template #item.project="{ item }">
             <div class="d-flex align-center gap-x-3">
-              <VAvatar
-                :size="34"
-                :image="item.logo"
-              />
               <div>
                 <h6 class="text-h6 text-no-wrap">
-                  {{ item.name }}
+                  {{ item.address_type }}
                 </h6>
                 <div class="text-body-2">
-                  {{ item.project }}
+                  {{ item.country }}
                 </div>
               </div>
             </div>
@@ -220,48 +266,21 @@ const moreList = [
 
           <template #item.leader="{ item }">
             <div class="text-base text-high-emphasis">
-              {{ item.leader }}
+              {{ item.contact_person_name }}
             </div>
           </template>
 
           <!-- Team -->
           <template #item.team="{ item }">
-            <div class="d-flex">
-              <div class="v-avatar-group">
-                <VAvatar
-                  v-for="(data, index) in item.team"
-                  :key="index"
-                  size="26"
-                >
-                  <VImg :src="data" />
-                </VAvatar>
-                <VAvatar
-                  v-if="item.extraMembers"
-                  :color="$vuetify.theme.current.dark ? '#373b50' : '#eeedf0'"
-                  :size="26"
-                >
-                  <div class="text-caption text-high-emphasis">
-                    +{{ item.extraMembers }}
-                  </div>
-                </VAvatar>
+              <div class="text-base text-high-emphasis">
+                {{ item.phone }}
               </div>
-            </div>
           </template>
 
           <!-- Progress -->
           <template #item.progress="{ item }">
-            <div class="d-flex align-center gap-3">
-              <div class="flex-grow-1">
-                <VProgressLinear
-                  :height="6"
-                  :model-value="item.progress"
-                  color="primary"
-                  rounded
-                />
-              </div>
-              <div class="text-body-1 text-high-emphasis">
-                {{ item.progress }}%
-              </div>
+            <div class="text-base text-high-emphasis">
+                {{ item.address }}
             </div>
           </template>
 
@@ -288,149 +307,52 @@ const moreList = [
 
     <VCol cols="12">
       <!-- 👉 User Activity timeline -->
-      <VCard title="User Activity Timeline">
-        <VCardText>
-          <VTimeline
-            side="end"
-            align="start"
-            line-inset="9"
-            truncate-line="start"
-            density="compact"
+      <VCard title="Order Status">
+        <VRow>
+          <VCol
+            v-for="(data, index) in logisticData"
+            :key="index"
+            cols="12"
+            md="3"
+            sm="6"
           >
-            <!-- SECTION Timeline Item: Flight -->
-            <VTimelineItem
-              dot-color="primary"
-              size="x-small"
-            >
-              <!-- 👉 Header -->
-              <div class="d-flex justify-space-between align-center gap-2 flex-wrap mb-3">
-                <span class="app-timeline-title">
-                  12 Invoices have been paid
-                </span>
-                <span class="app-timeline-meta">12 min ago</span>
-              </div>
-
-              <!-- 👉 Content -->
-              <div class="app-timeline-text">
-                Invoices have been paid to the company
-              </div>
-
-              <div class="d-inline-flex align-center timeline-chip mt-2">
-                <img
-                  :src="pdf"
-                  height="20"
-                  class="me-2"
-                  alt="img"
-                >
-                <span class="app-timeline-text font-weight-medium">
-                  invoice.pdf
-                </span>
-              </div>
-            </VTimelineItem>
-            <!-- !SECTION -->
-
-            <!-- SECTION Timeline Item: Interview Schedule -->
-            <VTimelineItem
-              size="x-small"
-              dot-color="success"
-            >
-              <!-- 👉 Header -->
-              <div class="d-flex justify-space-between align-center flex-wrap mb-3">
-                <div class="app-timeline-title">
-                  Client Meeting
-                </div>
-                <span class="app-timeline-meta">45 min ago</span>
-              </div>
-
-              <div class="app-timeline-text">
-                Project meeting with john @10:15am
-              </div>
-
-              <!-- 👉 Person -->
-              <div class="d-flex justify-space-between align-center flex-wrap">
-                <!-- 👉 Avatar & Personal Info -->
-                <div class="d-flex align-center mt-2">
-                  <VAvatar
-                    size="32"
-                    class="me-2"
-                    :image="avatar1"
-                  />
-                  <div class="d-flex flex-column">
-                    <p class="text-sm font-weight-medium text-medium-emphasis mb-0">
-                      Lester McCarthy (Client)
-                    </p>
-                    <span class="text-sm">CEO of ThemeSelection</span>
+            <div>
+              <VCard
+                class="logistics-card-statistics cursor-pointer"
+                :style="data.isHover ? `border-block-end-color: rgb(var(--v-theme-${data.color}))` : `border-block-end-color: rgba(var(--v-theme-${data.color}),0.38)`"
+                @mouseenter="data.isHover = true"
+                @mouseleave="data.isHover = false"
+              >
+                <VCardText>
+                  <div class="d-flex align-center gap-x-4 mb-2">
+                    <VAvatar
+                      variant="tonal"
+                      size="40"
+                      :color="data.color"
+                      rounded
+                    >
+                      <VIcon
+                        :icon="data.icon"
+                        size="24"
+                      />
+                    </VAvatar>
+                    <h4 class="text-h4">
+                      {{ data.value }}
+                    </h4>
                   </div>
-                </div>
-              </div>
-            </VTimelineItem>
-            <!-- !SECTION -->
-
-            <!-- SECTION Design Review -->
-            <VTimelineItem
-              size="x-small"
-              dot-color="info"
-            >
-              <!-- 👉 Header -->
-              <div class="d-flex justify-space-between align-center flex-wrap mb-3">
-                <span class="app-timeline-title">
-                  Create a new project for client
-                </span>
-                <span class="app-timeline-meta">2 Day Ago</span>
-              </div>
-
-              <!-- 👉 Content -->
-              <p class="app-timeline-text mb-2">
-                6 team members in a project
-              </p>
-
-              <div class="v-avatar-group demo-avatar-group">
-                <VAvatar :size="38">
-                  <VImg :src="avatar1" />
-                  <VTooltip
-                    activator="parent"
-                    location="top"
-                  >
-                    John Doe
-                  </VTooltip>
-                </VAvatar>
-
-                <VAvatar :size="38">
-                  <VImg :src="avatar2" />
-                  <VTooltip
-                    activator="parent"
-                    location="top"
-                  >
-                    Jennie Obrien
-                  </VTooltip>
-                </VAvatar>
-
-                <VAvatar :size="38">
-                  <VImg :src="avatar3" />
-                  <VTooltip
-                    activator="parent"
-                    location="top"
-                  >
-                    Peter Harper
-                  </VTooltip>
-                </VAvatar>
-
-                <VAvatar
-                  :size="38"
-                  :color="$vuetify.theme.current.dark ? '#373b50' : '#eeedf0'"
-                >
-                  +3
-                </VAvatar>
-              </div>
-            </VTimelineItem>
-            <!-- !SECTION -->
-          </VTimeline>
-        </VCardText>
+                  <div class="text-body-1 mb-2">
+                    {{ data.title }}
+                  </div>
+                </VCardText>
+              </VCard>
+            </div>
+          </VCol>
+        </VRow>
       </VCard>
     </VCol>
 
     <VCol cols="12">
-      <UserInvoiceTable />
+      <UserInvoiceTable :user-data="props.userData"/>
     </VCol>
   </VRow>
 </template>

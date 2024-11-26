@@ -1,4 +1,10 @@
 <script setup>
+const props = defineProps({
+  userData: {
+    type: Object,
+    required: true,
+  }
+})
 const searchQuery = ref('')
 const selectedStatus = ref()
 
@@ -18,11 +24,11 @@ const isLoading = ref(false)
 // 👉 headers
 const headers = [
   {
-    title: '#',
+    title: 'Order ID',
     key: 'id',
   },
   {
-    title: 'Status',
+    title: 'Order Status',
     key: 'trending',
     sortable: false,
   },
@@ -59,35 +65,30 @@ const invoices = computed(() => invoiceData.value?.invoices)
 const totalInvoices = computed(() => invoiceData.value?.totalInvoices)
 
 const resolveInvoiceStatusVariantAndIcon = status => {
-  if (status === 'Partial Payment')
+  if (status === 'Confirmed')
     return {
       variant: 'success',
       icon: 'bx-check',
     }
-  if (status === 'Paid')
+  if (status === 'Returned')
     return {
       variant: 'warning',
       icon: 'bx-pie-chart-alt',
     }
-  if (status === 'Downloaded')
+  if (status === 'Out for delivery')
     return {
       variant: 'info',
       icon: 'bx-down-arrow-alt',
     }
-  if (status === 'Draft')
+  if (status === 'Pending')
     return {
       variant: 'primary',
       icon: 'bx-folder',
     }
-  if (status === 'Sent')
+  if (status === 'Deliverd')
     return {
       variant: 'secondary',
       icon: 'bx-envelope',
-    }
-  if (status === 'Past Due')
-    return {
-      variant: 'error',
-      icon: 'bx-error-circle',
     }
 
   return {
@@ -132,30 +133,7 @@ const deleteInvoice = async id => {
       <VCardText>
         <div class="d-flex align-center justify-space-between flex-wrap gap-4">
           <div class="text-h5">
-            Invoice List
-          </div>
-          <div class="d-flex align-center gap-x-4">
-            <AppSelect
-              :model-value="itemsPerPage"
-              :items="[
-                { value: 10, title: '10' },
-                { value: 25, title: '25' },
-                { value: 50, title: '50' },
-                { value: 100, title: '100' },
-                { value: -1, title: 'All' },
-              ]"
-              style="inline-size: 6.25rem;"
-              @update:model-value="itemsPerPage = parseInt($event, 10)"
-            />
-
-            <!-- 👉 Export invoice -->
-            <VBtn
-              append-icon="bx-export"
-              variant="tonal"
-              color="secondary"
-            >
-              Export
-            </VBtn>
+            Orders
           </div>
         </div>
       </VCardText>
@@ -167,9 +145,15 @@ const deleteInvoice = async id => {
         v-model:items-per-page="itemsPerPage"
         v-model:page="page"
         :loading="isLoading"
-        :items-length="totalInvoices"
+        :items-length="props.userData.orders?.total ? props.userData.orders.total : null"
         :headers="headers"
-        :items="invoices"
+        :items="props.userData.orders?.data ? props.userData.orders.data : [{id : 1,
+                                                                             order_status : 'Pending',
+                                                                             payment_note : 'paid',
+                                                                             created_at : '',
+                                                                             order_amount : 100,
+                                                                             updated_at : ''
+                                                                            }]"
         item-value="total"
         class="text-no-wrap text-sm rounded-0"
         @update:options="updateOptions"
@@ -188,35 +172,32 @@ const deleteInvoice = async id => {
               <VAvatar
                 :size="28"
                 v-bind="props"
-                :color="resolveInvoiceStatusVariantAndIcon(item.invoiceStatus).variant"
+                :color="resolveInvoiceStatusVariantAndIcon(item.order_status).variant"
                 variant="tonal"
               >
                 <VIcon
                   :size="16"
-                  :icon="resolveInvoiceStatusVariantAndIcon(item.invoiceStatus).icon"
+                  :icon="resolveInvoiceStatusVariantAndIcon(item.order_status).icon"
                 />
               </VAvatar>
             </template>
             <p class="mb-0">
-              {{ item.invoiceStatus }}
+              {{ item.payment_note }}
             </p>
             <p class="mb-0">
-              Balance: {{ item.balance }}
-            </p>
-            <p class="mb-0">
-              Due date: {{ item.dueDate }}
+              Created date: {{ item.created_at }}
             </p>
           </VTooltip>
         </template>
 
         <!-- Total -->
         <template #item.total="{ item }">
-          ${{ item.total }}
+          ${{ item.order_amount }}
         </template>
 
         <!-- issued Date -->
         <template #item.date="{ item }">
-          {{ item.issuedDate }}
+          {{ item.updated_at }}
         </template>
 
         <!-- Actions -->

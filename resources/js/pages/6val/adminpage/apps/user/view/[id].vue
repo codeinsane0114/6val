@@ -1,10 +1,13 @@
 <script setup>
 import UserBioPanel from '@/views/apps/user/view/UserBioPanel.vue'
 import UserTabAccount from '@/views/apps/user/view/UserTabAccount.vue'
-import UserTabBillingsPlans from '@/views/apps/user/view/UserTabBillingsPlans.vue'
-import UserTabConnections from '@/views/apps/user/view/UserTabConnections.vue'
-import UserTabNotifications from '@/views/apps/user/view/UserTabNotifications.vue'
 import UserTabSecurity from '@/views/apps/user/view/UserTabSecurity.vue'
+import {useStore} from 'vuex'
+
+const store = useStore();
+
+const userData = store.state.customer.customerViewData
+console.log('customerViewData=======>',userData);
 
 const route = useRoute('6val-adminpage-apps-user-view-id')
 const userTab = ref(null)
@@ -18,27 +21,13 @@ const tabs = [
     icon: 'bx-lock-alt',
     title: 'Security',
   },
-  {
-    icon: 'bx-detail',
-    title: 'Billing & Plan',
-  },
-  {
-    icon: 'bx-bell',
-    title: 'Notifications',
-  },
-  {
-    icon: 'bx-link',
-    title: 'Connections',
-  },
 ]
+onMounted(async() => {
+    store.dispatch('customer/getCustomerViewData',route.params.id);
+});
+// const { data: userData } = await useApi(`/apps/users/${ route.params.id }`)
 
-const { data: userData } = await useApi(`/apps/users/${ route.params.id }`)
-if (userData.value) {
-  const [firstName, lastName] = userData.value.fullName.split(' ')
 
-  userData.value.firstName = firstName
-  userData.value.lastName = lastName
-}
 </script>
 
 <template>
@@ -79,14 +68,14 @@ if (userData.value) {
         :touch="false"
       >
         <VWindowItem>
-          <UserTabAccount />
+          <UserTabAccount :user-data="userData"/>
         </VWindowItem>
 
         <VWindowItem>
           <UserTabSecurity />
         </VWindowItem>
 
-        <VWindowItem>
+        <!-- <VWindowItem>
           <UserTabBillingsPlans />
         </VWindowItem>
 
@@ -96,7 +85,7 @@ if (userData.value) {
 
         <VWindowItem>
           <UserTabConnections />
-        </VWindowItem>
+        </VWindowItem> -->
       </VWindow>
     </VCol>
   </VRow>

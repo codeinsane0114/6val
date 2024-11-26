@@ -63,85 +63,41 @@ const resolveUserRoleVariant = role => {
           <VAvatar
             rounded
             :size="120"
-            :color="!props.userData.avatar ? 'primary' : undefined"
-            :variant="!props.userData.avatar ? 'tonal' : undefined"
+            :color="props.userData?.customer ? 'primary' : undefined"
+            :variant="props.userData?.cus ? 'tonal' : undefined"
           >
+            <!-- <VImg
+              v-if="props.userData.customer.image_full_url.path"
+              :src="props.userData.customer.image_full_url.path"
+            /> -->
             <VImg
-              v-if="props.userData.avatar"
-              :src="props.userData.avatar"
+              :src="props.userData.customer?.image_full_url ? props.userData.customer.image_full_url.path : null "
             />
-            <span
+            <!-- <span
               v-else
               class="text-5xl font-weight-medium"
             >
-              {{ avatarText(props.userData.fullName) }}
-            </span>
+              {{ avatarText(props.userData.customer.name) }}
+            </span> -->
           </VAvatar>
 
           <!-- 👉 User fullName -->
           <h5 class="text-h5 mt-4">
-            {{ props.userData.fullName }}
+            {{ props.userData.customer?.name ? props.userData.customer.name : null }}
           </h5>
 
           <!-- 👉 Role chip -->
-          <VChip
+          <!-- <VChip
             label
             :color="resolveUserRoleVariant(props.userData.role).color"
             size="small"
             class="text-capitalize mt-4"
           >
             {{ props.userData.role }}
-          </VChip>
+          </VChip> -->
         </VCardText>
 
         <VCardText>
-          <div class="d-flex justify-space-around gap-x-6 gap-y-2 flex-wrap mb-6">
-            <!-- 👉 Done task -->
-            <div class="d-flex align-center me-8">
-              <VAvatar
-                :size="40"
-                rounded
-                color="primary"
-                variant="tonal"
-                class="me-4"
-              >
-                <VIcon
-                  icon="bx-check"
-                  size="24"
-                />
-              </VAvatar>
-              <div>
-                <h5 class="text-h5">
-                  {{ `${(props.userData.taskDone / 1000).toFixed(2)}k` }}
-                </h5>
-
-                <span class="text-body-1 d-inline-block">Task Done</span>
-              </div>
-            </div>
-
-            <!-- 👉 Done Project -->
-            <div class="d-flex align-center me-4">
-              <VAvatar
-                :size="38"
-                rounded
-                color="primary"
-                variant="tonal"
-                class="me-4"
-              >
-                <VIcon
-                  icon="bx-customize"
-                  size="24"
-                />
-              </VAvatar>
-              <div>
-                <h5 class="text-h5">
-                  {{ kFormatter(props.userData.projectDone) }}
-                </h5>
-                <span class="text-body-1 d-inline-block">Project Done</span>
-              </div>
-            </div>
-          </div>
-
           <!-- 👉 Details -->
           <h5 class="text-h5">
             Details
@@ -156,7 +112,7 @@ const resolveUserRoleVariant = role => {
                 <h6 class="text-h6">
                   Username:
                   <div class="d-inline-block text-body-1">
-                    {{ props.userData.fullName }}
+                    {{ props.userData.customer?.name ? props.userData.customer.name : null }}
                   </div>
                 </h6>
               </VListItemTitle>
@@ -165,9 +121,9 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-h6">
-                  Billing Email:
+                  User Email:
                   <span class="text-body-1 d-inline-block">
-                    {{ props.userData.email }}
+                    {{ props.userData.customer?.email ? props.userData.customer.email : null }}
                   </span>
                 </h6>
               </VListItemTitle>
@@ -176,9 +132,9 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-h6">
-                  Status:
+                  Member ID:
                   <div class="d-inline-block text-body-1 text-capitalize">
-                    {{ props.userData.status }}
+                    {{ props.userData.customer?.member_id ? props.userData.customer.member_id : null }}
                   </div>
                 </h6>
               </VListItemTitle>
@@ -187,9 +143,9 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-h6">
-                  Role:
+                  Member Name:
                   <div class="d-inline-block text-capitalize text-body-1">
-                    {{ props.userData.role }}
+                    {{ props.userData.customer?.member_name ? props.userData.customer.member_name : null }}
                   </div>
                 </h6>
               </VListItemTitle>
@@ -198,9 +154,9 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-h6">
-                  Tax ID:
+                  Cell phone:
                   <div class="d-inline-block text-body-1">
-                    {{ props.userData.taxId }}
+                    {{ props.userData.customer?.phone ? props.userData.customer.phone : null }}
                   </div>
                 </h6>
               </VListItemTitle>
@@ -209,9 +165,9 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-h6">
-                  Contact:
+                  Rank:
                   <div class="d-inline-block text-body-1">
-                    {{ props.userData.contact }}
+                    {{ props.userData.customer?.rank ? props.userData.customer.rank : null }}
                   </div>
                 </h6>
               </VListItemTitle>
@@ -220,9 +176,9 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-h6">
-                  Language:
+                  Registration Date:
                   <div class="d-inline-block text-body-1">
-                    {{ props.userData.language }}
+                    {{ props.userData.customer?.created_at ? props.userData.customer.created_at : null }}
                   </div>
                 </h6>
               </VListItemTitle>
@@ -231,13 +187,140 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-h6">
-                  Country:
+                  Concierge:
                   <div class="d-inline-block text-body-1">
-                    {{ props.userData.country }}
+                    {{ props.userData.customer?.concierge ? props.userData.customer.concierge : null }}
                   </div>
                 </h6>
               </VListItemTitle>
             </VListItem>
+
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Recommender:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.recomender ? props.userData.customer.recomender : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Branch:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.branch ? props.userData.customer.branch : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Suggestion:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.suggestion ? props.userData.customer.suggestion : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Recommender:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.recomender ? props.userData.customer.recomender : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Mountain and rivers:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.mountains_rivers ? props.userData.customer.mountains_rivers : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Circulation Rate:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.circulation_rate ? props.userData.customer.circulation_rate : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Cumulative PV:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.cumulative_pv ? props.userData.customer.cumulative_pv : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Payment amount:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.wallet_balance ? props.userData.customer.wallet_balance : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Circulation Rate:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.circulation_rate ? props.userData.customer.circulation_rate : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Recognition account:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.recognition_account ? props.userData.customer.recognition_account : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Suspension of benefits:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.suspension_of_benefits ? props.userData.customer.suspension_of_benefits : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+
+            <VListItem>
+              <VListItemTitle>
+                <h6 class="text-h6">
+                  Zip code:
+                  <div class="d-inline-block text-body-1">
+                    {{ props.userData.customer?.zip ? props.userData.customer.zip : null }}
+                  </div>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
+
+
           </VList>
         </VCardText>
 
@@ -262,87 +345,6 @@ const resolveUserRoleVariant = role => {
     <!-- !SECTION -->
 
     <!-- SECTION Current Plan -->
-    <VCol cols="12">
-      <VCard class="current-plan">
-        <VCardText class="d-flex">
-          <!-- 👉 Standard Chip -->
-          <VChip
-            label
-            color="primary"
-            size="small"
-            class="font-weight-medium"
-          >
-            Popular
-          </VChip>
-
-          <VSpacer />
-
-          <!-- 👉 Current Price  -->
-          <div class="d-flex align-center">
-            <sup class="text-h5 text-primary mt-1">$</sup>
-            <h1 class="text-h1 text-primary">
-              99
-            </h1>
-            <sub class="mt-3"><h6 class="text-h6 font-weight-regular mb-n1">/ month</h6></sub>
-          </div>
-        </VCardText>
-
-        <VCardText>
-          <!-- 👉 Price Benefits -->
-          <VList class="card-list">
-            <VListItem
-              v-for="benefit in standardPlan.benefits"
-              :key="benefit"
-            >
-              <div class="d-flex align-center gap-x-2">
-                <VIcon
-                  size="6"
-                  color="secondary"
-                  icon="bx-bxs-circle"
-                />
-                <div class="text-medium-emphasis">
-                  {{ benefit }}
-                </div>
-              </div>
-            </VListItem>
-          </VList>
-
-          <!-- 👉 Days -->
-          <div class="my-6">
-            <div class="d-flex justify-space-between mb-1">
-              <h6 class="text-h6">
-                Days
-              </h6>
-              <h6 class="text-h6">
-                26 of 30 Days
-              </h6>
-            </div>
-
-            <!-- 👉 Progress -->
-            <VProgressLinear
-              rounded
-              rounded-bar
-              :model-value="65"
-              color="primary"
-            />
-
-            <p class="mt-1 text-body-2 mb-0">
-              4 days remaining
-            </p>
-          </div>
-
-          <!-- 👉 Upgrade Plan -->
-          <div class="d-flex gap-4">
-            <VBtn
-              block
-              @click="isUpgradePlanDialogVisible = true"
-            >
-              Upgrade Plan
-            </VBtn>
-          </div>
-        </VCardText>
-      </VCard>
-    </VCol>
     <!-- !SECTION -->
   </VRow>
 

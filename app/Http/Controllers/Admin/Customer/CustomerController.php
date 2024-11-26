@@ -95,7 +95,7 @@ class CustomerController extends BaseController
         return response()->json(['message'=> translate('update_successfully')]);
     }
 
-    public function getView(Request $request, $id): View|RedirectResponse
+    public function getView(Request $request, $id): JsonResponse
     {
         $customer = $this->customerRepo->getFirstWhere(params: ['id'=>$id],relations: ['addresses']);
         if (isset($customer)) {
@@ -125,7 +125,7 @@ class CustomerController extends BaseController
             return response()->json(['customer'=>$customer,'orders'=>$orders,'orderStatusArray'=>$orderStatusArray],201);
         }
         Toastr::error(translate('customer_Not_Found'));
-        return back();
+        return response()->json([],201);
     }
     public function exportOrderList(Request $request,$id): BinaryFileResponse
     {

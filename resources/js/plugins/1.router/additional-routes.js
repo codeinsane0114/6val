@@ -82,4 +82,11 @@ export const routes = [
     name: '6val-adminpage-apps-ecommerce-dashboard',
     component: () => import('@/pages/6val/adminpage/dashboards/ecommerce.vue'),
   },
+
+  //User Account list
+  // {
+  //   path: '/6val/adminpage/apps/user/view',
+  //   name: '6val-adminpage-apps-user-view-id',
+  //   component: () => import(`@/pages/6val/adminpage/apps/user/view/`)
+  // }
 ]

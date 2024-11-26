@@ -11,7 +11,7 @@ enum Customer
 
     const VIEW = [
         URI => 'view',
-        VIEW => 'admin-views.customer.customer-view'
+        VIEW => ''
     ];
     const ORDER_LIST_EXPORT = [
         URI => 'order-list-export',
